@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.10"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'com.gradle.plugin-publish'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+group 'com.github.kana112233'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+dependencies {
+    implementation gradleApi()
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'org.testng:testng:6.9.6'
+}
+
+pluginBundle {
+    website = 'https://github.com/kana112233/codelinecountplugin'
+    vcsUrl = 'https://github.com/kana112233/codelinecountplugin.git'
+    description = 'Code LineC ount Plugin!'
+    tags = ['count', 'code']
+
+    plugins {
+        countLine {
+            id = 'com.github.kana112233.codelinecountplugin.CodeLineCountPlugin'
+            displayName = 'countLine'
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
